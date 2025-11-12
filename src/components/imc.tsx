@@ -14,16 +14,20 @@ const IMC: React.FC<IMCProps> = () => {
     setErro('');
     setResultado('');
 
-    const pesoNum = parseFloat(peso);
-    const alturaNum = parseFloat(altura);
+    // Aceita vírgula decimal (ex: 1,75) e limpa espaços
+    const pesoClean = peso.replace(',', '.').trim();
+    const alturaClean = altura.replace(',', '.').trim();
 
-    // Validações
-    if (pesoNum <= 0) {
+    const pesoNum = parseFloat(pesoClean);
+    const alturaNum = parseFloat(alturaClean);
+
+    // Validações robustas
+    if (isNaN(pesoNum) || pesoNum <= 0) {
       setErro('O peso deve ser um valor positivo');
       return;
     }
 
-    if (alturaNum <= 0) {
+    if (isNaN(alturaNum) || alturaNum <= 0) {
       setErro('A altura deve ser um valor positivo');
       return;
     }
@@ -54,8 +58,9 @@ const IMC: React.FC<IMCProps> = () => {
       <h2>Calculadora de IMC</h2>
       <form className="imc-form" onSubmit={calcularIMC}>
         <div className="input-group">
-          <label>Peso (kg):</label>
+          <label htmlFor="peso">Peso (kg):</label>
           <input
+            id="peso"
             type="number"
             step="0.1"
             value={peso}
@@ -65,8 +70,9 @@ const IMC: React.FC<IMCProps> = () => {
           />
         </div>
         <div className="input-group">
-          <label>Altura (m):</label>
+          <label htmlFor="altura">Altura (m):</label>
           <input
+            id="altura"
             type="number"
             step="0.01"
             value={altura}
